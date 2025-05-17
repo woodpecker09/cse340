@@ -3,4 +3,120 @@
 *:before,
 *:after {
   box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+
+/******* header ***************/
+#top-header{
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  background-color:rgb(108, 51, 31);
+  padding: 2rem 1rem 2rem 1rem;
+}
+.siteName a, #tools a{
+  text-decoration: none;
+  color: rgb(246, 241, 241);
+
+}
+.siteName{
+  font-size: xx-large;
+  font-weight: 700;
+}
+
+/******* navegation ***************/
+nav{
+  background-color:  rgb(22, 3, 0);
+  padding: 0.5rem;
+}
+nav ul{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  list-style-type: none;
+  color: rgb(246, 241, 241);
+  font-size: large;
+  font-weight: 700;
+  padding: 1rem;
+}
+/******* body ***************/
+
+/******* hero ***************/
+#herodiv {
+  position: relative;
+}
+#herodiv picture img {
+  width: 100%;
+  padding: 1rem;
+  height: auto;
+
+}
+
+.contenthero{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 3%;
+  background-color: rgba(194, 194, 194, 0.5);
+  color:  rgb(22, 3, 0);
+  padding: 0.5rem;
+  border-radius: 1rem;
+  line-height: 0.1rem;
+}
+
+.contenthero button{
+  background-color: rgb(108, 51, 31);
+  color: rgb(246, 241, 241);
+  padding: 0.5rem;
+  border: 1px solid rgba(246, 241, 241,0.5);
+  font-size: medium;
+  font-weight: 700;
+  margin: 0.2rem 0 0 0;
+}
+
+/******* info ***************/
+#info{
+  display: grid;
+  grid-template-columns: 1fr;
+}
+#info section{
+  padding: 1rem;
+}
+#infoList{
+  grid-row: 1/2;
+}
+#clickLinks{
+  grid-row: 2/3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+#clickLinks div{
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+#clickLinks div a{
+  color: rgb(255, 255, 255);
+  font-size: large;
+
+}
+
+
+
+@media (min-width: 600px) {
+  #info{
+    grid-template-columns: 1fr 1fr;
+  }
+  #infoList{
+    grid-column: 2/3;
+  }
+  #clickLinks{
+    grid-row: 1/2;
+  }
 }
