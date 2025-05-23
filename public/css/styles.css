@@ -31,13 +31,22 @@ nav{
 }
 nav ul{
   display: flex;
-  justify-content: space-evenly;
+  justify-content:space-around;
   align-items: center;
   list-style-type: none;
-  color: rgb(246, 241, 241);
   font-size: large;
   font-weight: 700;
-  padding: 1rem;
+  padding: 0.5rem;
+}
+nav ul li a{
+  text-decoration: none;
+  color: rgb(246, 241, 241);
+  padding: 0.5rem;
+  border-radius: 1rem;
+}
+nav ul li a:hover{
+  color: rgb(108, 51, 31);
+  background-color: rgb(246, 241, 241);
 }
 /******* body ***************/
 
@@ -107,7 +116,57 @@ nav ul{
 
 }
 
+/* ------classification------- */
+#inv-display{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    padding: 0;
+  }
+#inv-display li{
+  max-width: 300px;
+  list-style-type: none;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+}
 
+#inv-display li img{
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
+.namePrice{
+  align-self: end;
+  align-content: end;
+  text-align: center;
+}
+
+/* -------details------- */
+#detail-display{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  gap: 1rem;
+}
+.detail-image img{
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
+.detail-info p{
+  padding: 1rem;
+  margin: 0;
+  border-radius: 1rem;
+}
+.detail-info p span{
+  font-weight: 700;
+}
+.detail-info p:nth-child(even){
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 @media (min-width: 600px) {
   #info{
@@ -118,5 +177,12 @@ nav ul{
   }
   #clickLinks{
     grid-row: 1/2;
+  }
+  /* -------details large view------- */
+  #detail-display{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 1rem;
   }
 }
