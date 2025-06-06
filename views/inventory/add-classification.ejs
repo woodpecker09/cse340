@@ -1,0 +1,28 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+<% if (errors) { %>
+  <ul class="notice">
+ <% errors.array().forEach(error => { %>
+   <li><%= error.msg %></li>
+<%  }) %>
+ </ul>
+<% } %>
+<div class="form-style">
+  <form id="classificationForm" action="/inv/classification" method="post">
+    <div>
+        <label for="classification_name">Classification Name:</label>
+        <input type="text" name="classification_name" id="classification_name" pattern="[a-zA-Z0-9]+" title="No spaces or special characters allowed" required value="<%= locals.classification_name %>">
+    </div>
+    <button type="submit">Add Classification</button>
+  </form>
+
+</div>
+
+<!-- The form must contain client-side validation. -->
+<!-- The view must be delivered via a route and using the MVC architecture as with all other views. -->
+<!-- The view must meet the requirements of the frontend checklist. -->

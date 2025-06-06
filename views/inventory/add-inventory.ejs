@@ -1,0 +1,71 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+<% if (errors) { %>
+  <ul class="notice">
+ <% errors.array().forEach(error => { %>
+   <li><%= error.msg %></li>
+<%  }) %>
+ </ul>
+<% } %>
+
+
+<div class="form-style">
+    <form id="inventoryForm" action="/inv/inventory" method="post">
+        <div>
+            <label for="classificationList">Classification</label>
+            <%- classification%>
+        </div>
+
+        <div>
+            <label for="inv_make">Make</label>
+            <input type="text" name="inv_make" id="inv_make" placeholder="Min of 3 characters" minlength="3" pattern="[a-zA-Z0-9 ]+" required value="<%= locals.inv_make %>">
+        </div>
+
+        <div>
+            <label for="inv_model">Model</label>
+            <input type="text" name="inv_model" id="inv_model" placeholder="Min of 3 characters" minlength="3" pattern="[a-zA-Z0-9 ]+" required value="<%= locals.inv_model %>">
+        </div>
+
+        <div>
+            <label for="inv_description">Description</label>
+            <textarea name="inv_description" id="inv_description" placeholder="Min of 4 characters"  minlength="3" required><%= locals.inv_description %></textarea>
+        </div>
+
+        <div>
+            <label for="inv_image">Image URL</label>
+            <input type="text" name="inv_image" id="inv_image" placeholder="Image URL" pattern="^(https?:\/\/|\/images\/|\/uploads\/|\/assets\/).*" required value="<%= locals.inv_image %>">
+        </div>
+
+        <div>
+            <label for="inv_thumbnail">Thumbnail URL</label>
+            <input type="text" name="inv_thumbnail" id="inv_thumbnail" placeholder="Thumbnail URL or Path" pattern="^(https?:\/\/|\/images\/|\/uploads\/|\/assets\/).*" required value="<%= locals.inv_thumbnail %>">
+        </div>
+
+        <div>
+            <label for="inv_price">Price</label>
+            <input type="number" name="inv_price" id="inv_price" placeholder="Price" required min="0" step="1" value="<%= locals.inv_price %>">
+        </div>
+
+        <div>
+            <label for="inv_year">Year</label>
+            <input type="number" name="inv_year" id="inv_year" placeholder="Enter a 4-digit year" required min="1000" max="9999" title="Enter a 4-digit year" value="<%= locals.inv_year %>">
+        </div>
+
+        <div>
+            <label for="inv_miles">Miles</label>
+            <input type="number" name="inv_miles" id="inv_miles" placeholder="Enter miles" required min="0" step="1" value="<%= locals.inv_miles %>">
+        </div>
+
+        <div>
+            <label for="inv_color">Color</label>
+            <input type="text" name="inv_color" id="inv_color"  placeholder="Min of 3 characters" minlength="3" pattern="[A-Za-z ]+" required value="<%= locals.inv_color %>">
+        </div>
+        <button type="submit">Add To Inventory</button>
+
+    </form>
+</div>
