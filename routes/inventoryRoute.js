@@ -12,6 +12,10 @@ router.get("/classification", utilities.handleErrors(invController.builClassific
 
 router.get("/inventory", utilities.handleErrors(invController.buildInventoryView));
 
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+
+router.get("/edit/:inventory_id", utilities.handleErrors(invController.editInventoryView))
+
 router.post(
   "/classification",
   invValidate.classificationRules(),
@@ -25,6 +29,12 @@ router.post(
   invValidate.checkInvData,
   utilities.handleErrors(invController.processInventory)
 )
+
+router.post("/update/",
+  invValidate.newInventoryRules(),
+  invValidate.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory))
+
 // Route to build inventory by classification view
 router.get("/type/:classificationId", invController.buildByClassificationId);
 

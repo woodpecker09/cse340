@@ -98,7 +98,8 @@ validate.checkRegData = async (req, res, next) => {
 }
 
 validate.checklogData = async (req, res, next) => {
-  const {account_email } = req.body
+  const {account_email} = req.body
+  console.log("checklogData", account_email)
   let errors = []
   errors = validationResult(req)
   if (!errors.isEmpty()) {
