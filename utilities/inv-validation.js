@@ -111,14 +111,14 @@ validate.newInventoryRules = () => {
       .escape()
       .notEmpty()
       .isLength({ min: 2 })
-      .matches(/^[a-zA-Z0-9]+$/)
+      .matches(/^[a-zA-Z0-9 ]+$/)
       .withMessage("Please provide a make."),
     body("inv_model")
       .trim()
       .escape()
       .notEmpty()
       .isLength({ min: 2 })
-      .matches(/^[a-zA-Z0-9]+$/)
+      .matches(/^[a-zA-Z0-9 ]+$/)
       .withMessage("Please provide a model."),
     body("inv_description")
       .trim()
@@ -165,7 +165,7 @@ validate.newInventoryRules = () => {
       .escape()
       .notEmpty()
       .isLength({ min: 3 })
-      .matches(/^[a-zA-Z]+$/)
+      .matches(/^[a-zA-Z ]+$/)
       .withMessage("Please provide a color."),
     body("inv_id")
       .trim()
