@@ -115,9 +115,7 @@ Util.buildClassificationList = async function (classification_id = null) {
 **************************************** */
 Util.checkJWTToken = (req, res, next) => {
  if (req.cookies.jwt) {
-  jwt.verify(
-   req.cookies.jwt,
-   process.env.ACCESS_TOKEN_SECRET,
+  jwt.verify( req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET,
    function (err, accountData) {
     if (err) {
      req.flash("Please log in")
@@ -129,6 +127,7 @@ Util.checkJWTToken = (req, res, next) => {
     next()
    })
  } else {
+  res.locals.loggedin = 0;
   next()
  }
 }
@@ -144,7 +143,20 @@ Util.checkJWTToken = (req, res, next) => {
     return res.redirect("/account/login")
   }
  }
- 
+
+/* ****************************************
+ *  Check Login Administrator
+ * ************************************ */
+ Util.checkLoginAccess = (req, res, next) => {
+  if (res.locals.loggedin && (res.locals.accountData.account_type === "Admin" || res.locals.accountData.account_type === "Employee")) {
+    next()
+  } else {
+    req.flash("notice", "You do not have access to this page, please log in as an Admin or Employee.")
+    return res.redirect("/account/login")
+  }
+ }
+
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 

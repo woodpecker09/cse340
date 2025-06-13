@@ -6,7 +6,32 @@
   font-family: "Roboto", sans-serif;
 }
 
+.preference {
+  margin: 3rem 0 0 0;
+  border-top: rgb(195, 199, 244) 1px solid;
+}
 
+.noticeCorrect {
+  padding: 0;
+  list-style-type: none;
+}
+.noticeCorrect li{
+  padding: 0.5rem;
+  border-radius: 1rem;
+  background-color: rgba(128, 255, 128, 0.5);
+  color: rgb(22, 3, 0);
+}
+.notice {
+  padding: 0;
+  list-style-type: none;
+}
+.notice li{
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 1rem;
+  background-color: rgba(255, 128, 128, 0.5);
+  color: rgb(22, 3, 0);
+}
 /******* header ***************/
 #top-header{
   display: grid;

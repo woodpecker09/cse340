@@ -6,17 +6,17 @@ const invController = require("../controllers/invController")
 const invValidate = require('../utilities/inv-validation')
 
 //Route to build management view
-router.get("/", utilities.handleErrors(invController.buildManagementView));
+router.get("/", utilities.checkLoginAccess, utilities.handleErrors(invController.buildManagementView));
 
-router.get("/classification", utilities.handleErrors(invController.builClassificationView));
+router.get("/classification", utilities.checkLoginAccess, utilities.handleErrors(invController.builClassificationView));
 
-router.get("/inventory", utilities.handleErrors(invController.buildInventoryView));
+router.get("/inventory", utilities.checkLoginAccess, utilities.handleErrors(invController.buildInventoryView));
 
-router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+router.get("/getInventory/:classification_id", utilities.checkLoginAccess, utilities.handleErrors(invController.getInventoryJSON))
 
-router.get("/edit/:inventory_id", utilities.handleErrors(invController.editInventoryView))
+router.get("/edit/:inventory_id", utilities.checkLoginAccess, utilities.handleErrors(invController.editInventoryView))
 
-router.get("/delete/:inventory_id", utilities.handleErrors(invController.deleteInventoryView))
+router.get("/delete/:inventory_id", utilities.checkLoginAccess, utilities.handleErrors(invController.deleteInventoryView))
 
 
 router.post(

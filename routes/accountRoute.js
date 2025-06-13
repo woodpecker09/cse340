@@ -9,6 +9,10 @@ router.get("/register",utilities.handleErrors(accountController.buildRegister))
 
 router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildManagement))
 
+router.get("/logout", utilities.handleErrors(accountController.accountLogout))
+
+router.get("/update", utilities.checkLogin, utilities.handleErrors(accountController.buildUpdate))
+
 router.post(
   "/register",
   regValidate.registationRules(),
@@ -20,6 +24,20 @@ router.post(
   regValidate.loginRules(),
   regValidate.checklogData,
   utilities.handleErrors(accountController.accountLogin)
+)
+
+router.post(
+  "/update-info",
+  regValidate.updateRules(),
+  regValidate.checkUpdateData,
+  utilities.handleErrors(accountController.updateAccount)
+)
+
+router.post(
+  "/update-password",
+  regValidate.updatePasswordRules(),
+  regValidate.checkUpdatePasswordData,
+  utilities.handleErrors(accountController.updatePassword)
 )
 module.exports = router
 

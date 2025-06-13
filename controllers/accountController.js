@@ -54,7 +54,7 @@ async function registerAccount(req, res) {
 
   if (regResult) {
     req.flash(
-      "notice",
+      "noticeCorrect",
       `Congratulations, you\'re registered ${account_firstname}. Please log in.`
     )
     res.status(201).render("account/login", {
@@ -101,7 +101,7 @@ async function accountLogin(req, res) {
       return res.redirect("/account/")
     }
     else {
-      req.flash("message notice", "Please check your credentials and try again.")
+      req.flash("notice", "Please check your credentials and try again.")
       res.status(400).render("account/login", {
         title: "Login",
         nav,
@@ -120,11 +120,127 @@ async function accountLogin(req, res) {
 async function buildManagement(req, res) {
   let nav = await utilities.getNav()
   res.render("account/account-management", {
-    title: "You're logged in",
+    title: "Account Management",
     nav,
-    errors: null
+    errors: null,
   })
 }
 
+/* ****************************************
+ *  Process logout request
+ * ************************************ */
+async function accountLogout(req, res) {
+  if(res.locals.loggedin === 1){
+    res.clearCookie("jwt")
+    req.flash("noticeCorrect", "You have been logged out.")
+    return res.redirect("../")
+  } else{
+    return res.redirect("../")
+  }
+  
+}
 
-module.exports = { buildLogin, buildRegister, registerAccount,  accountLogin, buildManagement } 
+/* ****************************************
+ *  Deliver update view
+ * *************************************** */
+async function buildUpdate(req, res) {
+  const {account_firstname, account_lastname, account_email} = res.locals.accountData
+  let nav = await utilities.getNav()
+  res.render("account/update-view", {
+    title: "Edit Account",
+    nav,
+    errors: null,
+    account_firstname: account_firstname,
+    account_lastname: account_lastname,
+    account_email: account_email
+  })
+}
+
+/* ****************************************
+ *  Process update request
+ * *************************************** */
+async function updateAccount(req, res) {
+  let nav = await utilities.getNav()
+  const { account_firstname, account_lastname, account_email } = req.body
+  const { account_id } = res.locals.accountData
+
+  const updateResult = await accountModel.updateAccount(
+    account_id,
+    account_firstname,
+    account_lastname,
+    account_email,
+  ) 
+  res.locals.accountData = updateResult.rows[0]
+  if (updateResult) {
+    req.flash("noticeCorrect", "Your account has been updated successfully.")
+    res.status(200).render("account/account-management", {
+      title: "Account Management",
+      nav,
+      errors: null,
+    })
+  } else {
+    req.flash("notice", "Sorry, the update failed.")
+    res.status(501).render("account/update-view", {
+      title: "Edit Account",
+      nav,
+      errors: null,
+    })
+  }
+}
+
+
+/* ****************************************
+ *  Process registration request Password is hashed before storing
+ * *************************************** */
+async function updatePassword(req, res) {
+  let nav = await utilities.getNav()
+  const {account_id, account_password} = req.body
+  const accountData = await accountModel.getEmailById(account_id)
+  // Hash the password before storing
+  let hashedPassword
+  try {
+    // regular password and cost (salt is generated automatically)
+    hashedPassword = await bcrypt.hashSync(account_password, 10)
+  } catch (error) {
+    req.flash("notice", 'Sorry, there was an error processing the update.')
+    res.status(500).render("account/update-view", {
+      title: "Edit Account",
+      nav,
+      errors: null,
+      account_firstname: accountData.account_firstname,
+      account_lastname: accountData.account_lastname,
+      account_email: accountData.account_email,
+      account_id: accountData.account_id
+    })
+  }
+
+  const regResult = await accountModel.registerAccountPassword(
+    account_id,
+    hashedPassword
+  )
+
+  if (regResult) {
+    req.flash(
+      "noticeCorrect",
+      "Congratulations! You have successfully changed your password."
+    )
+    res.status(201).render("account/account-management", {
+      title: "Account Management",
+      nav,
+      errors: null,
+    })
+  } else {
+    req.flash("notice", "Sorry, the update failed.")
+    res.status(501).render("account/update-view", {
+      title: "Edit Account",
+      nav,
+      errors: null,
+      account_firstname: accountData.account_firstname,
+      account_lastname: accountData.account_lastname,
+      account_email: accountData.account_email,
+      account_id: accountData.account_id
+    })
+  }
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount,  accountLogin, buildManagement, accountLogout, buildUpdate, updateAccount, updatePassword }; 
