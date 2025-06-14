@@ -1,6 +1,7 @@
 const utilities = require("./index")
 const accountModel = require("../models/account-model")
 const { body, validationResult } = require("express-validator")
+const bcrypt = require("bcryptjs")
 const validate = {}
 
 /*  **********************************
@@ -49,6 +50,18 @@ validate.registationRules = () => {
         minSymbols: 1,
       })
       .withMessage("Password does not meet requirements."),
+      
+      body("account_type")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 1 })
+      .withMessage("Type of Account Not Defined")
+      .custom(async (accountType) => {
+        if (accountType !== 'Client' && accountType !== 'Employee' && accountType !== 'Admin'){
+          throw new Error("Type of Account Not Defined")
+        }
+      })
   ]
 }
 
@@ -141,6 +154,31 @@ validate.updatePasswordRules = () => {
   ]
 }
 
+validate.masterKeyRules = () => {
+  return [
+    body("master_key")
+      .trim()
+      .notEmpty()
+      .isStrongPassword({
+        minLength: 12,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage("Master Key does not meet requirements.")
+      .custom(async (master_key, { req }) => {
+        const accountType = req.body.account_type
+        const masterKeyData = await accountModel.getMasterKeyByType(accountType)
+        const checkMasterKey = await bcrypt.compare(master_key, masterKeyData.master_key_hash)     
+        if (!checkMasterKey) {
+          throw new Error("Key is not correct.")
+        }
+      })
+  ]
+}
+  
+
 validate.checkUpdatePasswordData = async (req, res, next) => {
   const {account_id} = req.body
   let errors = []
@@ -165,7 +203,7 @@ validate.checkUpdatePasswordData = async (req, res, next) => {
  * Check data and return errors or continue to registration
  * ***************************** */
 validate.checkRegData = async (req, res, next) => {
-  const { account_firstname, account_lastname, account_email } = req.body
+  const { account_firstname, account_lastname, account_email, account_type } = req.body
   let errors = []
   errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -177,6 +215,7 @@ validate.checkRegData = async (req, res, next) => {
       account_firstname,
       account_lastname,
       account_email,
+      account_type
     })
     return
   }
@@ -220,6 +259,20 @@ validate.checkUpdateData = async (req, res, next) => {
   next()
 }
 
+validate.checkKeyData = async (req, res, next) => {
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    res.render("account/assign-type", {
+      errors,
+      title: "Assign Account Type",
+      nav
+    })
+    return
+  }
+  next()
+}
 
 
 module.exports = validate

@@ -3,6 +3,11 @@ const router = new express.Router()
 const utilities = require("../utilities/index")
 const accountController = require("../controllers/accountController")
 const regValidate = require('../utilities/account-validation')
+
+router.get("/type", utilities.handleErrors(accountController.buildType))
+
+router.get("/type-access", utilities.handleErrors(accountController.buildAccessType))
+
 router.get("/login",utilities.handleErrors(accountController.buildLogin))
 
 router.get("/register",utilities.handleErrors(accountController.buildRegister))
@@ -38,6 +43,13 @@ router.post(
   regValidate.updatePasswordRules(),
   regValidate.checkUpdatePasswordData,
   utilities.handleErrors(accountController.updatePassword)
+)
+
+router.post(
+  "/master-key",
+  regValidate.masterKeyRules(),
+  regValidate.checkKeyData,
+  utilities.handleErrors(accountController.prossessMasterKey)
 )
 module.exports = router
 

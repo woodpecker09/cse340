@@ -6,6 +6,25 @@
   font-family: "Roboto", sans-serif;
 }
 
+.account-type a{
+  background-color: rgba(182, 244, 135, 0.621);
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 1rem;
+}
+.account-type a:hover{
+  font-size: large;
+}
+
+.form-style input[type="radio"]{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+
+
+
+
 .preference {
   margin: 3rem 0 0 0;
   border-top: rgb(195, 199, 244) 1px solid;

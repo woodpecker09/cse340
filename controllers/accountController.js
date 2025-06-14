@@ -5,6 +5,30 @@ const utilities = require("../utilities/")
 const accountModel = require("../models/account-model")
 
 /* ****************************************
+*  Deliver access type view
+* *************************************** */
+async function buildType(req, res) {
+  let nav = await utilities.getNav()
+  res.render("account/select-type", {
+    title: "Account Type",
+    nav,
+    errors: null
+  })
+}
+
+/* ****************************************
+*  Deliver access type Assign in view
+* *************************************** */
+async function buildAccessType(req, res) {
+  let nav = await utilities.getNav()
+  res.render("account/assign-type", {
+    title: "Assign Account Type",
+    nav,
+    errors: null
+  })
+}
+
+/* ****************************************
 *  Deliver login view
 * *************************************** */
 async function buildLogin(req, res, next) {
@@ -15,7 +39,14 @@ async function buildLogin(req, res, next) {
     errors: null
   })
 }
+
+/* ****************************************
+*  Deliver Register view
+* *************************************** */
 async function buildRegister(req, res, next) {
+  if(!res.locals.account_type){
+    res.locals.account_type = 'Client'
+  }
   let nav = await utilities.getNav()
   res.render("account/register", {
     title: "Register",
@@ -29,7 +60,7 @@ async function buildRegister(req, res, next) {
 * *************************************** */
 async function registerAccount(req, res) {
   let nav = await utilities.getNav()
-  const { account_firstname, account_lastname, account_email, account_password } = req.body
+  const { account_firstname, account_lastname, account_email, account_password, account_type} = req.body
 
   // Hash the password before storing
   let hashedPassword
@@ -49,7 +80,8 @@ async function registerAccount(req, res) {
     account_firstname,
     account_lastname,
     account_email,
-    hashedPassword
+    hashedPassword,
+    account_type
   )
 
   if (regResult) {
@@ -243,4 +275,21 @@ async function updatePassword(req, res) {
   }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount,  accountLogin, buildManagement, accountLogout, buildUpdate, updateAccount, updatePassword }; 
+
+/* ****************************************
+ *  Deliver account type view
+ * *************************************** */
+async function prossessMasterKey(req, res) {
+  const {account_type} = req.body
+  res.locals.account_type = account_type
+  let nav = await utilities.getNav()
+  res.render("account/register", {
+    title: "Registration",
+    nav,
+    errors: null
+  })
+}
+
+
+
+module.exports = { buildLogin, buildRegister, registerAccount,  accountLogin, buildManagement, accountLogout, buildUpdate, updateAccount, updatePassword, buildType, buildAccessType, prossessMasterKey}; 

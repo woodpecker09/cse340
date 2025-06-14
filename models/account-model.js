@@ -3,10 +3,10 @@ const pool = require("../database/")
 /* *****************************
 *   Register new account
 * *************************** */
-async function registerAccount(account_firstname, account_lastname, account_email, account_password){
+async function registerAccount(account_firstname, account_lastname, account_email, account_password, accountType){
   try {
-    const sql = "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *"
-    return await pool.query(sql, [account_firstname, account_lastname, account_email, account_password])
+    const sql = "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, $5) RETURNING *"
+    return await pool.query(sql, [account_firstname, account_lastname, account_email, account_password, accountType])
   } catch (error) {
     return error.message
   }
@@ -68,4 +68,14 @@ async function registerAccountPassword(account_id, account_password) {
   }
 }
 
-module.exports = {registerAccount, checkExistingEmail, getAccountByEmail, updateAccount, getEmailById, registerAccountPassword}
+async function getMasterKeyByType(accountType) {
+  try {
+    const sql = "SELECT master_key_hash FROM master_key WHERE account_type = $1"
+    const result = await pool.query(sql, [accountType])
+    return result.rows[0]
+  } catch (error) {
+    return error.message
+  }
+}
+
+module.exports = {registerAccount, checkExistingEmail, getAccountByEmail, updateAccount, getEmailById, registerAccountPassword, getMasterKeyByType}
